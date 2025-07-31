@@ -6,6 +6,7 @@ import { useParams } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import { useIntersection } from "@lib/hooks/use-in-view"
+import { useTranslations } from "@lib/hooks/use-translations"
 import Divider from "@modules/common/components/divider"
 import OptionSelect from "@modules/products/components/product-actions/option-select"
 
@@ -37,6 +38,7 @@ export default function ProductActions({
   const [options, setOptions] = useState<Record<string, string | undefined>>({})
   const [isAdding, setIsAdding] = useState(false)
   const countryCode = useParams().countryCode as string
+  const { t } = useTranslations()
 
   // If there is only 1 variant, preselect the options
   useEffect(() => {
@@ -144,10 +146,10 @@ export default function ProductActions({
           data-testid="add-product-button"
         >
           {!selectedVariant
-            ? "Select variant"
+            ? t("common.select_variant")
             : !inStock
-            ? "Out of stock"
-            : "Add to cart"}
+            ? t("common.out_of_stock")
+            : t("common.add_to_cart")}
         </Button>
         <MobileActions
           product={product}

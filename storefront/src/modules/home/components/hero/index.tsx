@@ -1,7 +1,12 @@
+"use client"
+
 import { Github } from "@medusajs/icons"
 import { Button, Heading } from "@medusajs/ui"
+import { useTranslations } from "@lib/hooks/use-translations"
 
 const Hero = () => {
+  const { t } = useTranslations()
+  
   return (
     <div className="h-[75vh] w-full border-b border-ui-border-base relative bg-ui-bg-subtle">
       <div className="absolute inset-0 z-10 flex flex-col justify-center items-center text-center small:p-32 gap-6">
@@ -10,13 +15,13 @@ const Hero = () => {
             level="h1"
             className="text-3xl leading-10 text-ui-fg-base font-normal"
           >
-            Well done! You have successfully deployed your Medusa 2.0 store on Railway!
+            {t("hero.title")}
           </Heading>
           <Heading
             level="h2"
             className="text-3xl leading-10 text-ui-fg-subtle font-normal"
           >
-            Need help customizing your store?
+            {t("hero.subtitle")}
           </Heading>
         </span>
         <a
@@ -24,7 +29,7 @@ const Hero = () => {
           target="_blank"
         >
           <h1 style={{ textDecoration: "underline" }}>
-            Visit the tutorial
+            {t("hero.cta")}
           </h1>
         </a>
       </div>

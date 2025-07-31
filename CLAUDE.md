@@ -148,6 +148,12 @@ To reconcile different branches, always rebase or cherry-pick. Do not merge.
 Sometimes, after you've been working on one feature, I will ask you to start work on an unrelated feature. If I do, you should probably repeat this process from the beginning (checkout main, pull changes, create a new branch). When in doubt, just ask.
 
 
+## Ressources
+
+https://docs.medusajs.com/
+
+
+
 ## Changelog
 
 Write or update the changelog.md File everytime we make changes to the app and do versioning of the app
