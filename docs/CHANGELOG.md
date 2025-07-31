@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2025-01-31
+
+### Added
+- **Neues dersolarwart.de Design-System**
+  - Implementierte dunkles Theme mit Solarwart-Farben (Schwarz/Grün)
+  - Glassmorphism-Effekte und Blur-Backgrounds
+  - Neue Farbpalette: solarwart-green (#77fc58), solarwart-black, etc.
+  - Gradient-Texteffekte und animierte Blur-Circles
+- **Header-Navigation statt Sidebar**
+  - Neue horizontale Navigation im Header
+  - Sticky Header mit Backdrop-Blur-Effekt
+  - Direkte Links zu Produkten, Kollektionen, Über uns und Kontakt
+  - Icons für Suche, Account und Warenkorb
+- **Neue Hero-Komponente**
+  - Großflächige Hero-Section mit animierten Hintergrundeffekten
+  - Feature-Cards mit Glassmorphism-Design
+  - CTA-Buttons im neuen Design-System
+- **Überarbeitete Produkt-Präsentation**
+  - Produkt-Cards mit Glassmorphism-Effekt
+  - Hover-Overlays mit Animationen
+  - Verbesserte Grid-Layouts (responsive)
+- **Footer im neuen Design**
+  - Dunkler Footer mit strukturierten Bereichen
+  - Links zu Hauptseite dersolarwart.de
+
+### Changed
+- Komplette UI-Überarbeitung im Storefront
+- Tailwind-Konfiguration erweitert mit neuen Farben und Utilities
+- Layout-Template angepasst für dunkles Theme
+- CartDropdown mit neuem Design und Icons
+- ProductPreview-Komponente komplett überarbeitet
+
+### Technical Details
+- Erweiterte Tailwind CSS Konfiguration
+- Neue CSS-Utility-Klassen: glass-card, gradient-text, blur-circle, etc.
+- Responsive Breakpoints für alle Komponenten
+- Build erfolgreich getestet
+
 ## [0.1.2] - 2025-07-30
 
 ### Fixed

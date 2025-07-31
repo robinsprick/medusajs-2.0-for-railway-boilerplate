@@ -31,19 +31,32 @@ export default async function ProductPreview({
 
   return (
     <LocalizedClientLink href={`/products/${product.handle}`} className="group">
-      <div data-testid="product-wrapper">
-        <Thumbnail
-          thumbnail={product.thumbnail}
-          images={product.images}
-          size="full"
-          isFeatured={isFeatured}
-        />
-        <div className="flex txt-compact-medium mt-4 justify-between">
-          <Text className="text-ui-fg-subtle" data-testid="product-title">
+      <div data-testid="product-wrapper" className="glass-card p-4 hover:scale-105 transition-all duration-300 hover:border-solarwart-green/30">
+        <div className="relative overflow-hidden rounded-lg">
+          <Thumbnail
+            thumbnail={product.thumbnail}
+            images={product.images}
+            size="full"
+            isFeatured={isFeatured}
+          />
+          {/* Hover Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-solarwart-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+            <span className="text-white text-sm font-medium">Details ansehen →</span>
+          </div>
+        </div>
+        <div className="flex flex-col mt-4 gap-2">
+          <Text className="text-white font-medium line-clamp-2" data-testid="product-title">
             {product.title}
           </Text>
-          <div className="flex items-center gap-x-2">
-            {cheapestPrice && <PreviewPrice price={cheapestPrice} />}
+          <div className="flex items-center justify-between">
+            <Text className="text-white/60 text-sm">
+              {product.subtitle || "Professionelle Qualität"}
+            </Text>
+            {cheapestPrice && (
+              <div className="text-solarwart-green font-semibold">
+                <PreviewPrice price={cheapestPrice} />
+              </div>
+            )}
           </div>
         </div>
       </div>

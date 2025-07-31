@@ -80,10 +80,17 @@ const CartDropdown = ({
       <Popover className="relative h-full">
         <Popover.Button className="h-full">
           <LocalizedClientLink
-            className="hover:text-ui-fg-base"
+            className="nav-link flex items-center gap-2"
             href="/cart"
             data-testid="nav-cart-link"
-          >{`${t("nav.cart")} (${totalItems})`}</LocalizedClientLink>
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="9" cy="21" r="1"/>
+              <circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            <span className="text-xs">{totalItems}</span>
+          </LocalizedClientLink>
         </Popover.Button>
         <Transition
           show={cartDropdownOpen}
@@ -97,10 +104,10 @@ const CartDropdown = ({
         >
           <Popover.Panel
             static
-            className="hidden small:block absolute top-[calc(100%+1px)] right-0 bg-white border-x border-b border-gray-200 w-[420px] text-ui-fg-base"
+            className="hidden small:block absolute top-[calc(100%+1px)] right-0 glass-card-dark w-[420px] text-white"
             data-testid="nav-cart-dropdown"
           >
-            <div className="p-4 flex items-center justify-center">
+            <div className="p-4 flex items-center justify-center border-b border-white/10">
               <h3 className="text-large-semi">{t("nav.cart")}</h3>
             </div>
             {cartState && cartState.items?.length ? (
@@ -170,12 +177,12 @@ const CartDropdown = ({
                 </div>
                 <div className="p-4 flex flex-col gap-y-4 text-small-regular">
                   <div className="flex items-center justify-between">
-                    <span className="text-ui-fg-base font-semibold">
+                    <span className="text-white font-semibold">
                       {t("common.subtotal")}{" "}
-                      <span className="font-normal">(exkl. MwSt.)</span>
+                      <span className="font-normal text-white/60">(exkl. MwSt.)</span>
                     </span>
                     <span
-                      className="text-large-semi"
+                      className="text-large-semi text-solarwart-green"
                       data-testid="cart-subtotal"
                       data-value={subtotal}
                     >
@@ -187,7 +194,7 @@ const CartDropdown = ({
                   </div>
                   <LocalizedClientLink href="/cart" passHref>
                     <Button
-                      className="w-full"
+                      className="w-full btn-primary"
                       size="large"
                       data-testid="go-to-cart-button"
                     >
@@ -199,15 +206,19 @@ const CartDropdown = ({
             ) : (
               <div>
                 <div className="flex py-16 flex-col gap-y-4 items-center justify-center">
-                  <div className="bg-gray-900 text-small-regular flex items-center justify-center w-6 h-6 rounded-full text-white">
-                    <span>0</span>
+                  <div className="bg-solarwart-green/20 text-small-regular flex items-center justify-center w-12 h-12 rounded-full text-solarwart-green">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="9" cy="21" r="1"/>
+                      <circle cx="20" cy="21" r="1"/>
+                      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
                   </div>
                   <span>{t("cart.empty")}</span>
                   <div>
                     <LocalizedClientLink href="/store">
                       <>
                         <span className="sr-only">Go to all products page</span>
-                        <Button onClick={close}>{t("common.continue_shopping")}</Button>
+                        <Button className="btn-secondary" onClick={close}>{t("common.continue_shopping")}</Button>
                       </>
                     </LocalizedClientLink>
                   </div>

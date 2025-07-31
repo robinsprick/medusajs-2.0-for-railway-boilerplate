@@ -34,6 +34,22 @@ module.exports = {
           80: "#1F2937",
           90: "#111827",
         },
+        solarwart: {
+          green: "#77fc58",
+          "green-light": "#8ffd72",
+          "green-dark": "#5fe342",
+          black: "#000000",
+          "black-light": "rgba(0, 0, 0, 0.8)",
+          "glass": "rgba(255, 255, 255, 0.05)",
+          "glass-dark": "rgba(0, 0, 0, 0.3)",
+        },
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-green-blur': 'radial-gradient(circle at center, #77fc58 0%, transparent 50%)',
+      },
+      backdropBlur: {
+        xs: '2px',
       },
       borderRadius: {
         none: "0px",
