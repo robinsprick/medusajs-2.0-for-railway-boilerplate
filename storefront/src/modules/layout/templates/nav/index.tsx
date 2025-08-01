@@ -1,10 +1,12 @@
 import { Suspense } from "react"
+import Image from "next/image"
 
 import { listRegions } from "@lib/data/regions"
 import { StoreRegion } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CartButton from "@modules/layout/components/cart-button"
 import CountrySelect from "@modules/layout/components/country-select"
+import logoSolarwart from "../../../../../public/logo-solarwart.avif"
 
 export default async function Nav() {
   const regions = await listRegions().then((regions: StoreRegion[]) => regions)
@@ -17,10 +19,18 @@ export default async function Nav() {
           <div className="flex items-center">
             <LocalizedClientLink
               href="/"
-              className="text-xl font-semibold text-white hover:text-solarwart-green transition-colors"
+              className="flex items-center gap-3 hover:opacity-90 transition-opacity"
               data-testid="nav-store-link"
             >
-              Solarwart Shop
+              <Image
+                src={logoSolarwart}
+                alt="Solarwart Logo"
+                width={150}
+                height={40}
+                className="h-10 w-auto"
+                priority
+                style={{ filter: 'brightness(0) invert(1)' }}
+              />
             </LocalizedClientLink>
           </div>
 
