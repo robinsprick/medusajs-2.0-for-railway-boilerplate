@@ -23,10 +23,10 @@ export function UrlCleaner() {
       // Set a marker in localStorage that cart was updated
       localStorage.setItem('cart_last_update', Date.now().toString())
       
-      // First refresh to get latest data
-      router.refresh()
+      // Just clean the URL, don't refresh here
+      // AutoRefresh component handles the refresh
       
-      // Then clean the URL after a short delay
+      // Clean the URL after a short delay
       setTimeout(() => {
         const cleanUrl = new URL(window.location.href)
         // Remove all cart-related parameters

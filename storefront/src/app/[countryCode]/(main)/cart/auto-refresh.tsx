@@ -1,13 +1,17 @@
 "use client"
 
 import { useEffect, useRef } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 export function AutoRefresh() {
   const searchParams = useSearchParams()
-  const hasRefreshed = useRef(false)
+  const router = useRouter()
+  const hasProcessed = useRef(false)
   
   useEffect(() => {
+    // Prevent multiple executions
+    if (hasProcessed.current) return
+    
     // Check if we have refresh indicators in the URL
     const needsRefresh = searchParams.has('_refresh') || 
                         searchParams.has('_t') ||
@@ -19,35 +23,37 @@ export function AutoRefresh() {
     console.log('[AutoRefresh] Checking:', {
       needsRefresh,
       fromKonfigurator,
-      hasRefreshed: hasRefreshed.current,
+      hasProcessed: hasProcessed.current,
       params: Object.fromEntries(searchParams.entries())
     })
     
-    // Only refresh once and only if we have the indicators
-    if (needsRefresh && !hasRefreshed.current) {
-      hasRefreshed.current = true
+    // Only process once and only if we have the indicators
+    if (needsRefresh && !hasProcessed.current) {
+      hasProcessed.current = true
       
-      console.log('[AutoRefresh] Triggering automatic page reload...')
+      console.log('[AutoRefresh] Processing refresh...')
       
-      // Small delay to ensure server processing is complete
+      // Clean the URL first to prevent loop
+      const cleanUrl = new URL(window.location.href)
+      cleanUrl.searchParams.delete('_refresh')
+      cleanUrl.searchParams.delete('_t')
+      cleanUrl.searchParams.delete('items_added')
+      cleanUrl.searchParams.delete('from')
+      cleanUrl.searchParams.delete('source')
+      
+      // Replace URL without triggering navigation
+      window.history.replaceState({}, '', cleanUrl.pathname + cleanUrl.search)
+      
+      // Then refresh the router to get fresh data
       setTimeout(() => {
-        // Force a hard reload to get fresh data
-        window.location.reload()
+        console.log('[AutoRefresh] Refreshing router...')
+        router.refresh()
       }, 100)
     }
-  }, [searchParams])
+  }, [searchParams, router])
   
-  // Show loading indicator while refreshing
-  if (searchParams.has('_refresh') && !hasRefreshed.current) {
-    return (
-      <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Warenkorb wird aktualisiert...</p>
-        </div>
-      </div>
-    )
-  }
+  // Don't show loading indicator anymore to prevent visual loop
+  // The refresh happens so fast it's not needed
   
   return null
 }

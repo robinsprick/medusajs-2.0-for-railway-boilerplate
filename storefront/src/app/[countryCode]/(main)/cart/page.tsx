@@ -185,7 +185,7 @@ export default async function Cart({
     <>
       <AutoRefresh />
       <CartTemplate cart={cart} customer={customer} />
-      <CartRefresher />
+      {/* <CartRefresher /> Temporarily disabled to prevent conflicts */}
       {shouldCleanUrl && <UrlCleaner />}
     </>
   )
