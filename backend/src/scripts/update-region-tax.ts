@@ -1,7 +1,7 @@
 import { 
   ExecArgs,
-} from '@medusajs/types';
-import { Modules } from '@medusajs/utils';
+} from '@medusajs/framework/types';
+import { Modules } from '@medusajs/framework/utils';
 
 export default async function updateRegionTax({ container }: ExecArgs) {
   const regionModuleService = container.resolve(Modules.REGION);
@@ -20,14 +20,11 @@ export default async function updateRegionTax({ container }: ExecArgs) {
       
       try {
         await regionModuleService.updateRegions(region.id, {
-          automatic_taxes: true,
-          metadata: {
-            tax_provider_id: 'system'
-          }
+          automatic_taxes: true
         });
         
         console.log(`✓ Updated region ${region.name}`);
-      } catch (error) {
+      } catch (error: any) {
         console.error(`Failed to update region ${region.name}:`, error.message);
       }
     }
