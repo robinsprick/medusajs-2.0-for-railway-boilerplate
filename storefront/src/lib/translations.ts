@@ -41,6 +41,12 @@ export const translations = {
     "cart.summary": "Zusammenfassung",
     "cart.checkout": "Zur Kasse",
     "cart.sign_in_for_checkout": "Anmelden für Checkout",
+    "cart.item": "Artikel",
+    "cart.variant": "Variante",
+    "cart.back_to_shopping_cart": "Zurück zum Warenkorb",
+    "cart.back": "Zurück",
+    "cart.add_promotion_code": "Rabattcode hinzufügen",
+    "cart.in_your_cart": "In deinem Warenkorb",
     
     // Product
     "product.description": "Beschreibung",
@@ -88,6 +94,11 @@ export const translations = {
     "checkout.payment": "Zahlung",
     "checkout.review": "Überprüfung",
     "checkout.place_order": "Bestellung aufgeben",
+    "checkout.edit": "Bearbeiten",
+    "checkout.contact": "Kontakt",
+    "checkout.continue_to_payment": "Weiter zur Zahlung",
+    "checkout.same_as_shipping": "Rechnungs- und Lieferadresse sind identisch",
+    "checkout.powered_by": "Unterstützt von",
     
     // Order
     "order.confirmed": "Bestellung bestätigt",
@@ -171,6 +182,12 @@ export const translations = {
     "cart.summary": "Summary",
     "cart.checkout": "Go to checkout",
     "cart.sign_in_for_checkout": "Sign in for checkout",
+    "cart.item": "Item",
+    "cart.variant": "Variant",
+    "cart.back_to_shopping_cart": "Back to shopping cart",
+    "cart.back": "Back",
+    "cart.add_promotion_code": "Add Promotion Code(s)",
+    "cart.in_your_cart": "In your Cart",
     
     // Product
     "product.description": "Description",
@@ -218,6 +235,11 @@ export const translations = {
     "checkout.payment": "Payment",
     "checkout.review": "Review",
     "checkout.place_order": "Place order",
+    "checkout.edit": "Edit",
+    "checkout.contact": "Contact",
+    "checkout.continue_to_payment": "Continue to payment",
+    "checkout.same_as_shipping": "Billing- and delivery address are the same",
+    "checkout.powered_by": "Powered by",
     
     // Order
     "order.confirmed": "Order confirmed",
