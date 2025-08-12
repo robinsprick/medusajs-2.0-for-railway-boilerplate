@@ -173,8 +173,18 @@ export async function GET(request: NextRequest) {
     
     // If redirect is requested, redirect to cart page
     if (redirectToCart) {
-      const cartUrl = `/${countryCode}/cart?added=${successCount}${errorCount > 0 ? '&errors=true' : ''}`
-      return NextResponse.redirect(new URL(cartUrl, request.url), {
+      // Get the proper base URL for the shop
+      const shopBaseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
+                         process.env.NEXT_PUBLIC_MEDUSA_STORE_URL || 
+                         'https://shop.dersolarwart.de'
+      
+      const cartUrl = new URL(`/${countryCode}/cart`, shopBaseUrl)
+      cartUrl.searchParams.set('added', successCount.toString())
+      if (errorCount > 0) {
+        cartUrl.searchParams.set('errors', 'true')
+      }
+      
+      return NextResponse.redirect(cartUrl, {
         status: 303,
         headers: {
           'Access-Control-Allow-Origin': allowedOrigin,

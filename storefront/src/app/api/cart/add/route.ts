@@ -68,8 +68,13 @@ export async function GET(request: NextRequest) {
     console.log('[API Cart Add] Results:', results)
     console.log('[API Cart Add] Success count:', successCount, 'of', variantIds.length)
     
+    // Get the proper base URL for the shop
+    const shopBaseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
+                       process.env.NEXT_PUBLIC_MEDUSA_STORE_URL || 
+                       'https://shop.dersolarwart.de'
+    
     // Redirect to cart page with status and timestamp to force refresh
-    const redirectUrl = new URL(`/${countryCode}/cart`, request.url)
+    const redirectUrl = new URL(`/${countryCode}/cart`, shopBaseUrl)
     
     // Add timestamp to force cache bypass
     redirectUrl.searchParams.set('t', Date.now().toString())

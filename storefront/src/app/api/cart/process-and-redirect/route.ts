@@ -71,8 +71,13 @@ export async function GET(request: NextRequest) {
     revalidateTag('cart')
     revalidatePath(`/${countryCode}/cart`)
     
-    // Create redirect URL with a cache-busting parameter
-    const redirectUrl = new URL(`/${countryCode}/cart`, request.url)
+    // Get the proper base URL for the shop
+    const shopBaseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
+                       process.env.NEXT_PUBLIC_MEDUSA_STORE_URL || 
+                       'https://shop.dersolarwart.de'
+    
+    // Create redirect URL with the correct shop domain
+    const redirectUrl = new URL(`/${countryCode}/cart`, shopBaseUrl)
     redirectUrl.searchParams.set('_t', Date.now().toString())
     redirectUrl.searchParams.set('_refresh', '1')
     
@@ -83,6 +88,8 @@ export async function GET(request: NextRequest) {
     if (successCount > 0) {
       redirectUrl.searchParams.set('items_added', successCount.toString())
     }
+    
+    console.log('[Process & Redirect] Redirecting to:', redirectUrl.toString())
     
     // Use a special redirect that forces the browser to refetch
     return new Response(null, {
@@ -99,6 +106,12 @@ export async function GET(request: NextRequest) {
     
   } catch (error: any) {
     console.error('[Process & Redirect] Unexpected error:', error)
-    return NextResponse.redirect(new URL('/de/cart', request.url))
+    
+    // Use correct shop URL for error redirect too
+    const shopBaseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
+                       process.env.NEXT_PUBLIC_MEDUSA_STORE_URL || 
+                       'https://shop.dersolarwart.de'
+    
+    return NextResponse.redirect(new URL('/de/cart', shopBaseUrl))
   }
 }
