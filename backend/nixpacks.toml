@@ -2,7 +2,7 @@
 nixPkgs = ['nodejs_20', 'pnpm-9_x']
 
 [phases.install]
-cmds = ['pnpm install --frozen-lockfile']
+cmds = ['pnpm install --no-frozen-lockfile']
 
 [phases.build]
 cmds = [
@@ -11,7 +11,7 @@ cmds = [
 ]
 
 [start]
-cmd = 'cd .medusa/server && npx medusa start --port=${PORT:-9000}'
+cmd = './start.sh'
 
 [variables]
 NODE_ENV = 'production'
