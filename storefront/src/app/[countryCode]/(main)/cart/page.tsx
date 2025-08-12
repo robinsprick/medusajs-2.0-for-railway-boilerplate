@@ -5,6 +5,12 @@ import { enrichLineItems, retrieveCart, getOrSetCart, addToCart } from "@lib/dat
 import { HttpTypes } from "@medusajs/types"
 import { getCustomer } from "@lib/data/customer"
 import { UrlCleaner } from "./url-cleaner"
+import { CartRefresher } from "./cart-refresher"
+import { revalidatePath, revalidateTag } from "next/cache"
+
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: "Warenkorb",
@@ -113,8 +119,19 @@ async function processUrlParameters(
       results
     })
     
-    // Return the updated cart
-    return await retrieveCart()
+    // Force cache revalidation after adding items
+    if (successCount > 0) {
+      // Revalidate multiple cache tags to ensure fresh data
+      revalidateTag('cart')
+      revalidatePath(`/${countryCode}/cart`)
+      
+      // Set a flag in localStorage for client-side refresh
+      // This will be read by CartRefresher component
+    }
+    
+    // Return the updated cart with fresh data
+    const updatedCart = await retrieveCart()
+    return updatedCart
     
   } catch (error: any) {
     console.error('[Cart] Critical error processing URL parameters:', error)
@@ -166,6 +183,7 @@ export default async function Cart({
   return (
     <>
       <CartTemplate cart={cart} customer={customer} />
+      <CartRefresher />
       {shouldCleanUrl && <UrlCleaner />}
     </>
   )

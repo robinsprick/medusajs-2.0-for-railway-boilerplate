@@ -1,27 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { addToCart, getOrSetCart, retrieveCart } from '@lib/data/cart'
 import { getRegion } from '@lib/data/regions'
+import { revalidateTag, revalidatePath } from 'next/cache'
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
     const variants = searchParams.get('variants')
-    const action = searchParams.get('action')
     const countryCode = searchParams.get('country') || 'de'
     const source = searchParams.get('source')
     
-    console.log('[API Cart Add] Processing URL:', request.url)
-    console.log('[API Cart Add] Parameters:', { 
+    console.log('[Process & Redirect] Starting with params:', { 
       variants, 
-      action, 
       countryCode, 
       source 
     })
     
     if (!variants) {
-      // Redirect to cart page if no variants specified
+      // Just redirect to cart if no variants
       return NextResponse.redirect(new URL(`/${countryCode}/cart`, request.url))
     }
     
@@ -34,24 +33,25 @@ export async function GET(request: NextRequest) {
     // Ensure region exists
     const region = await getRegion(countryCode)
     if (!region) {
-      console.error('[API Cart Add] Region not found for country:', countryCode)
-      // Fallback to cart page
+      console.error('[Process & Redirect] Region not found for country:', countryCode)
       return NextResponse.redirect(new URL('/de/cart', request.url))
     }
     
+    // Get or create cart
     let cart = await retrieveCart()
     
     if (!cart) {
-      console.log('[API Cart Add] Creating new cart for country:', countryCode)
+      console.log('[Process & Redirect] Creating new cart for country:', countryCode)
       cart = await getOrSetCart(countryCode)
     }
     
+    // Process all variants
     const results = []
     let successCount = 0
     
     for (const variantId of variantIds) {
       try {
-        console.log('[API Cart Add] Adding variant:', variantId)
+        console.log('[Process & Redirect] Adding variant:', variantId)
         await addToCart({ 
           variantId, 
           quantity: 1,
@@ -60,38 +60,45 @@ export async function GET(request: NextRequest) {
         results.push({ variantId, success: true })
         successCount++
       } catch (error: any) {
-        console.error('[API Cart Add] Failed to add variant:', variantId, error)
+        console.error('[Process & Redirect] Failed to add variant:', variantId, error)
         results.push({ variantId, success: false, error: error.message })
       }
     }
     
-    console.log('[API Cart Add] Results:', results)
-    console.log('[API Cart Add] Success count:', successCount, 'of', variantIds.length)
+    console.log('[Process & Redirect] Completed. Success:', successCount, 'of', variantIds.length)
     
-    // Redirect to cart page with status and timestamp to force refresh
+    // Force cache invalidation
+    revalidateTag('cart')
+    revalidatePath(`/${countryCode}/cart`)
+    
+    // Create redirect URL with a cache-busting parameter
     const redirectUrl = new URL(`/${countryCode}/cart`, request.url)
+    redirectUrl.searchParams.set('_t', Date.now().toString())
+    redirectUrl.searchParams.set('_refresh', '1')
     
-    // Add timestamp to force cache bypass
-    redirectUrl.searchParams.set('t', Date.now().toString())
-    
-    // Add query parameters to show status
     if (source) {
-      redirectUrl.searchParams.set('source', source)
+      redirectUrl.searchParams.set('from', source)
     }
     
     if (successCount > 0) {
-      redirectUrl.searchParams.set('added', successCount.toString())
+      redirectUrl.searchParams.set('items_added', successCount.toString())
     }
     
-    if (results.some(r => !r.success)) {
-      redirectUrl.searchParams.set('errors', 'true')
-    }
-    
-    return NextResponse.redirect(redirectUrl, { status: 303 })
+    // Use a special redirect that forces the browser to refetch
+    return new Response(null, {
+      status: 302,
+      headers: {
+        'Location': redirectUrl.toString(),
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+        'X-Cart-Updated': 'true',
+        'X-Items-Added': successCount.toString()
+      }
+    })
     
   } catch (error: any) {
-    console.error('[API Cart Add] Unexpected error:', error)
-    // Fallback to cart page on error
+    console.error('[Process & Redirect] Unexpected error:', error)
     return NextResponse.redirect(new URL('/de/cart', request.url))
   }
 }

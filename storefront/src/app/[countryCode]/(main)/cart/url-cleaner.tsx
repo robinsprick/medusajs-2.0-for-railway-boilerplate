@@ -1,32 +1,58 @@
 "use client"
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 
 export function UrlCleaner() {
+  const router = useRouter()
+  const hasCleanedRef = useRef(false)
+  
   useEffect(() => {
-    // Delay URL cleaning to ensure processing is complete
-    const timeoutId = setTimeout(() => {
-      const url = new URL(window.location.href)
+    // Prevent multiple cleanups
+    if (hasCleanedRef.current) return
+    
+    const url = new URL(window.location.href)
+    const hasCartParams = url.searchParams.has('variants') || 
+                         url.searchParams.has('action') || 
+                         url.searchParams.has('add_to_cart') ||
+                         url.searchParams.has('t')
+    
+    if (hasCartParams) {
+      hasCleanedRef.current = true
       
-      // Remove all cart-related parameters
-      url.searchParams.delete('variants')
-      url.searchParams.delete('action')
-      url.searchParams.delete('cart_id')
-      url.searchParams.delete('source')
-      url.searchParams.delete('add_to_cart')
-      url.searchParams.delete('payload')
-      url.searchParams.delete('redirect')
-      url.searchParams.delete('count')
-      url.searchParams.delete('quantity')
-      url.searchParams.delete('bulk_add')
+      // Set a marker in localStorage that cart was updated
+      localStorage.setItem('cart_last_update', Date.now().toString())
       
-      // Remove individual variant parameters (v0, v1, etc.)
-      for (let i = 0; i < 10; i++) {
-        url.searchParams.delete(`v${i}`)
-      }
+      // First refresh to get latest data
+      router.refresh()
       
-      window.history.replaceState({}, '', url.toString())
-    }, 1000) // Delay by 1 second to ensure processing completes
+      // Then clean the URL after a short delay
+      setTimeout(() => {
+        const cleanUrl = new URL(window.location.href)
+        // Remove all cart-related parameters
+        cleanUrl.searchParams.delete('variants')
+        cleanUrl.searchParams.delete('action')
+        cleanUrl.searchParams.delete('cart_id')
+        cleanUrl.searchParams.delete('source')
+        cleanUrl.searchParams.delete('add_to_cart')
+        cleanUrl.searchParams.delete('payload')
+        cleanUrl.searchParams.delete('redirect')
+        cleanUrl.searchParams.delete('count')
+        cleanUrl.searchParams.delete('quantity')
+        cleanUrl.searchParams.delete('bulk_add')
+        cleanUrl.searchParams.delete('added')
+        cleanUrl.searchParams.delete('errors')
+        cleanUrl.searchParams.delete('t')
+        
+        // Remove individual variant parameters (v0, v1, etc.)
+        for (let i = 0; i < 10; i++) {
+          cleanUrl.searchParams.delete(`v${i}`)
+        }
+        
+        // Replace URL without triggering navigation
+        window.history.replaceState({}, '', cleanUrl.pathname + cleanUrl.search)
+      }, 100)
+    }
     
     // Check for localStorage items
     const pendingVariants = localStorage.getItem('medusa_variants_to_add')
@@ -45,9 +71,7 @@ export function UrlCleaner() {
         console.error('[Cart] Error parsing cart transfer data:', error)
       }
     }
-    
-    return () => clearTimeout(timeoutId)
-  }, [])
+  }, [router])
   
   return null
 }
