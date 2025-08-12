@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2025-08-12
+
+### Added
+- **Erweiterte Cart-Integration für Cross-Domain**
+  - Neue API-Route `/api/cart/add` für direkte URL-basierte Integration
+  - Neue API-Route `/api/cart/external-add` mit CORS-Support
+  - GET-Support für `/api/cart/add-variants` Route
+  - Automatische Weiterleitung zum Cart nach Produkthinzufügung
+  - Status-Parameter in Cart-URL (added=X, errors=true)
+- **Verbesserte Fehlerbehandlung**
+  - Region-Validierung vor Cart-Erstellung
+  - Tax Provider Fehlerbehandlung
+  - Ausführliches Logging für Debugging
+  - Fallback zu 'de' wenn Country Code fehlt
+- **Multiple URL-Formate unterstützt**
+  - Standard: ?variants=id1,id2&action=add
+  - Alternative: ?add_to_cart=id
+  - Base64: ?payload=encoded_data
+  - Individual: ?v0=id1&v1=id2
+
+### Changed
+- Cart-Page processUrlParameters erweitert für mehr Formate
+- API-Routen mit besserem Error-Handling
+- Logging verbessert für alle Cart-Operationen
+
+### Fixed
+- Tax Provider "null" Fehler behoben
+- Region-Initialisierung korrigiert
+- Cart-Cookie-Handling verbessert
+
+### Technical Details
+- CORS-Header für externe Domains
+- Force-dynamic für API-Routen
+- 303 Redirects für GET-Requests
+- Comprehensive Error Logging
+
 ## [0.3.0] - 2025-08-12
 
 ### Added
