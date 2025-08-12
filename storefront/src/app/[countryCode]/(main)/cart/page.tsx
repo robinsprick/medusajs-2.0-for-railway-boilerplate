@@ -50,7 +50,8 @@ async function processUrlParameters(
     }
   }
   
-  if (variantIds.length === 0 || (!action && !payload && !searchParams?.add_to_cart)) {
+  // Allow processing even without action if we have variants
+  if (variantIds.length === 0) {
     return null
   }
   
@@ -59,46 +60,66 @@ async function processUrlParameters(
     action, 
     cartId, 
     source,
+    countryCode,
     originalParams: searchParams 
   })
   
   try {
-    if (variantIds.length === 0) {
-      console.log('[Cart] No valid variant IDs found')
-      return null
-    }
+    // Ensure we have a valid country code
+    const finalCountryCode = countryCode || 'de'
     
-    // Get or create cart
+    // Get or create cart with proper region
     let cart = await retrieveCart()
     
     if (!cart) {
-      cart = await getOrSetCart(countryCode)
-      console.log('[Cart] Created new cart:', cart.id)
+      console.log('[Cart] Creating new cart for country:', finalCountryCode)
+      cart = await getOrSetCart(finalCountryCode)
+      console.log('[Cart] Created new cart:', cart.id, 'with region:', cart.region_id)
+    } else {
+      console.log('[Cart] Using existing cart:', cart.id, 'with region:', cart.region_id)
     }
     
     const results = []
+    let successCount = 0
+    let errorCount = 0
+    
     for (const variantId of variantIds) {
       try {
         console.log('[Cart] Adding variant to cart:', variantId)
         await addToCart({
           variantId: variantId,
           quantity: 1,
-          countryCode,
+          countryCode: finalCountryCode,
         })
         results.push({ variantId, success: true })
+        successCount++
         console.log('[Cart] Successfully added variant:', variantId)
-      } catch (error) {
+      } catch (error: any) {
         console.error('[Cart] Failed to add variant:', variantId, error)
-        results.push({ variantId, success: false, error })
+        results.push({ 
+          variantId, 
+          success: false, 
+          error: error?.message || 'Unknown error' 
+        })
+        errorCount++
+        // Continue adding other variants even if one fails
       }
     }
     
-    console.log('[Cart] Processing complete:', results)
+    console.log('[Cart] Processing complete:', {
+      total: variantIds.length,
+      success: successCount,
+      errors: errorCount,
+      results
+    })
     
+    // Return the updated cart
     return await retrieveCart()
     
-  } catch (error) {
-    console.error('[Cart] Error processing URL parameters:', error)
+  } catch (error: any) {
+    console.error('[Cart] Critical error processing URL parameters:', error)
+    console.error('[Cart] Error details:', error?.message || 'Unknown error')
+    // Don't throw, return null to allow page to render
     return null
   }
 }
