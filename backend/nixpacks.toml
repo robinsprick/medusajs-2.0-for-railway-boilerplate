@@ -1,0 +1,17 @@
+[phases.setup]
+nixPkgs = ['nodejs_20', 'pnpm-9_x']
+
+[phases.install]
+cmds = ['pnpm install --frozen-lockfile']
+
+[phases.build]
+cmds = [
+    'echo "Building Medusa with dummy env vars..."',
+    'DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" JWT_SECRET="dummy" COOKIE_SECRET="dummy" pnpm run build'
+]
+
+[start]
+cmd = 'cd .medusa/server && npx medusa start --port=${PORT:-9000}'
+
+[variables]
+NODE_ENV = 'production'
