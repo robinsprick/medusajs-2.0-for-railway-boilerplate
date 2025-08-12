@@ -6,6 +6,7 @@ import { HttpTypes } from "@medusajs/types"
 import { getCustomer } from "@lib/data/customer"
 import { UrlCleaner } from "./url-cleaner"
 import { CartRefresher } from "./cart-refresher"
+import { AutoRefresh } from "./auto-refresh"
 import { revalidatePath, revalidateTag } from "next/cache"
 
 // Force dynamic rendering for this page
@@ -182,6 +183,7 @@ export default async function Cart({
 
   return (
     <>
+      <AutoRefresh />
       <CartTemplate cart={cart} customer={customer} />
       <CartRefresher />
       {shouldCleanUrl && <UrlCleaner />}
