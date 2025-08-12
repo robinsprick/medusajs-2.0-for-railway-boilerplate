@@ -8,6 +8,16 @@ export const GET = async (
   req: MedusaRequest,
   res: MedusaResponse
 ) => {
+  // Check for secret parameter for security
+  const secret = req.query.secret as string;
+  
+  if (secret !== 'fix-tax-2024') {
+    return res.status(401).json({
+      success: false,
+      message: 'Unauthorized - invalid secret'
+    });
+  }
+
   const regionModuleService = req.scope.resolve(Modules.REGION);
   const taxModuleService = req.scope.resolve(Modules.TAX);
   

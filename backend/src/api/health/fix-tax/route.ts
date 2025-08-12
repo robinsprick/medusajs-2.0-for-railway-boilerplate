@@ -4,17 +4,18 @@ import type {
 } from '@medusajs/framework/http';
 import { Modules } from '@medusajs/framework/utils';
 
+// This endpoint is in the health directory which doesn't require authentication
 export const GET = async (
   req: MedusaRequest,
   res: MedusaResponse
 ) => {
-  // Check for secret parameter
+  // Check for secret parameter for security
   const secret = req.query.secret as string;
   
   if (secret !== 'fix-tax-2024') {
     return res.status(401).json({
       success: false,
-      message: 'Unauthorized'
+      message: 'Unauthorized - invalid secret'
     });
   }
 
@@ -22,7 +23,7 @@ export const GET = async (
   const taxModuleService = req.scope.resolve(Modules.TAX);
   
   try {
-    console.log('Fixing tax provider for regions via store endpoint...');
+    console.log('Fixing tax provider for regions via health endpoint...');
 
     // Get available tax providers
     let taxProviders = [];
@@ -55,7 +56,7 @@ export const GET = async (
     
     const results = [];
 
-    // Update each region to enable automatic taxes and set tax provider
+    // Update each region to enable automatic taxes
     for (const region of regions) {
       console.log(`Updating region: ${region.name} (${region.id})`);
       
