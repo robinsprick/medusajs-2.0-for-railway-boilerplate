@@ -8,11 +8,21 @@ export const GET = async (
   req: MedusaRequest,
   res: MedusaResponse
 ) => {
+  // Check for secret parameter
+  const secret = req.query.secret as string;
+  
+  if (secret !== 'fix-tax-2024') {
+    return res.status(401).json({
+      success: false,
+      message: 'Unauthorized'
+    });
+  }
+
   const regionModuleService = req.scope.resolve(Modules.REGION);
   const taxModuleService = req.scope.resolve(Modules.TAX);
   
   try {
-    console.log('Fixing tax provider for regions...');
+    console.log('Fixing tax provider for regions via store endpoint...');
 
     // Get available tax providers
     let taxProviders = [];
