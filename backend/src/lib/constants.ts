@@ -17,9 +17,12 @@ export const BACKEND_URL = process.env.BACKEND_PUBLIC_URL ?? process.env.RAILWAY
 /**
  * Database URL for Postgres instance used by the backend
  */
-export const DATABASE_URL = assertValue(
-  process.env.DATABASE_URL,
-  'Environment variable for DATABASE_URL is not set',
+export const DATABASE_URL = process.env.DATABASE_URL || (
+  IS_DEV ? 'postgresql://postgres:postgres@localhost:5432/medusa' : 
+  assertValue(
+    process.env.DATABASE_URL,
+    'Environment variable for DATABASE_URL is not set',
+  )
 )
 
 /**
@@ -45,17 +48,23 @@ export const STORE_CORS = process.env.STORE_CORS;
 /**
  * JWT Secret used for signing JWT tokens
  */
-export const JWT_SECRET = assertValue(
-  process.env.JWT_SECRET,
-  'Environment variable for JWT_SECRET is not set',
+export const JWT_SECRET = process.env.JWT_SECRET || (
+  IS_DEV ? 'supersecret' :
+  assertValue(
+    process.env.JWT_SECRET,
+    'Environment variable for JWT_SECRET is not set',
+  )
 )
 
 /**
  * Cookie secret used for signing cookies
  */
-export const COOKIE_SECRET = assertValue(
-  process.env.COOKIE_SECRET,
-  'Environment variable for COOKIE_SECRET is not set',
+export const COOKIE_SECRET = process.env.COOKIE_SECRET || (
+  IS_DEV ? 'supersecret' :
+  assertValue(
+    process.env.COOKIE_SECRET,
+    'Environment variable for COOKIE_SECRET is not set',
+  )
 )
 
 /**

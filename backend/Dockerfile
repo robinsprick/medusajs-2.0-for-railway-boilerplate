@@ -1,40 +1,44 @@
-FROM node:20-alpine
-
-# Install dependencies for building
-RUN apk add --no-cache python3 make g++ curl
+FROM node:20
 
 # Install pnpm
 RUN npm install -g pnpm@9.10.0
 
-# Set working directory
 WORKDIR /app
 
 # Copy package files
 COPY package.json pnpm-lock.yaml ./
 
-# Install all dependencies (including dev for build)
-RUN pnpm install --frozen-lockfile
+# Install dependencies
+RUN pnpm install
 
 # Copy source code
 COPY . .
 
+# Set dummy environment variables for build time only
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
+ENV JWT_SECRET="dummy-jwt-secret-for-build"
+ENV COOKIE_SECRET="dummy-cookie-secret-for-build"
+
 # Build the application
 RUN pnpm run build
 
-# Set production environment
+# Create start script that will use real environment variables
+RUN echo '#!/bin/sh' > /app/docker-start.sh && \
+    echo 'echo "Starting Medusa Backend..."' >> /app/docker-start.sh && \
+    echo 'echo "PORT: ${PORT:-9000}"' >> /app/docker-start.sh && \
+    echo 'echo "NODE_ENV: production"' >> /app/docker-start.sh && \
+    echo 'echo "DATABASE_URL is set: $([ -n "$DATABASE_URL" ] && echo "Yes" || echo "No")"' >> /app/docker-start.sh && \
+    echo '' >> /app/docker-start.sh && \
+    echo 'cd /app/.medusa/server' >> /app/docker-start.sh && \
+    echo 'exec npx medusa start --port=${PORT:-9000}' >> /app/docker-start.sh && \
+    chmod +x /app/docker-start.sh
+
+# Reset environment variables (they will be set by Railway at runtime)
+ENV DATABASE_URL=""
+ENV JWT_SECRET=""
+ENV COOKIE_SECRET=""
 ENV NODE_ENV=production
 
-# Create a startup script
-RUN echo '#!/bin/sh' > /app/start.sh && \
-    echo 'echo "Starting Medusa server..."' >> /app/start.sh && \
-    echo 'echo "PORT: ${PORT:-9000}"' >> /app/start.sh && \
-    echo 'echo "NODE_ENV: ${NODE_ENV}"' >> /app/start.sh && \
-    echo 'cd /app/.medusa/server' >> /app/start.sh && \
-    echo 'exec npx medusa start --port=${PORT:-9000}' >> /app/start.sh && \
-    chmod +x /app/start.sh
-
-# Expose port (Railway will override this)
 EXPOSE 9000
 
-# Start the application using our script
-CMD ["/app/start.sh"]
+CMD ["/app/docker-start.sh"]
