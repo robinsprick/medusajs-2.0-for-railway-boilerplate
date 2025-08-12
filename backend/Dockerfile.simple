@@ -1,0 +1,30 @@
+# Simple Dockerfile for Railway - Single Stage
+FROM node:20
+
+# Install pnpm
+RUN npm install -g pnpm@9.10.0
+
+# Set working directory
+WORKDIR /app
+
+# Copy everything
+COPY . .
+
+# Install dependencies
+RUN pnpm install
+
+# Build the application
+RUN pnpm run build
+
+# Set environment
+ENV NODE_ENV=production
+
+# The start script that Railway will use
+RUN echo '#!/bin/bash' > /start.sh && \
+    echo 'echo "Starting Medusa on port ${PORT:-9000}"' >> /start.sh && \
+    echo 'cd /app/.medusa/server' >> /start.sh && \
+    echo 'npx medusa start --port=${PORT:-9000}' >> /start.sh && \
+    chmod +x /start.sh
+
+# Start command
+CMD ["/start.sh"]
