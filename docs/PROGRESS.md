@@ -69,6 +69,21 @@
 - ✅ Footer im dunklen Design mit strukturierten Links
 - ✅ Build erfolgreich getestet
 
+### 7. Cross-Domain Cart Integration (2025-08-12)
+- ✅ Cart-Page erweitert für URL-Parameter Verarbeitung
+  - Unterstützt ?variants=id1,id2&action=add für Produkt-Import
+  - Automatische Cart-Erstellung wenn nicht vorhanden
+  - Batch-Verarbeitung mehrerer Varianten
+- ✅ URL-Cleaner Component implementiert
+  - Entfernt Query-Parameter nach Verarbeitung
+  - LocalStorage cleanup für Transfer-Daten
+- ✅ API-Route /api/cart/add-variants als Fallback
+  - POST-Endpoint für programmatischen Zugriff
+  - JSON-basierte Varianten-Übergabe
+- ✅ Integration mit Konfigurator vorbereitet
+  - Unterstützt Weiterleitung von konfigurator.dersolarwart.de
+  - Cart-Transfer über URL-Parameter möglich
+
 ## 🔧 Technische Details
 
 ### Gelöste Probleme:

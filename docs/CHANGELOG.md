@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025-08-12
+
+### Added
+- **Cross-Domain Cart Integration**
+  - Cart-Page unterstützt URL-Parameter für Produkt-Import
+  - Query-Parameter: ?variants=id1,id2&action=add&cart_id=xxx
+  - Automatische Cart-Erstellung wenn nicht vorhanden
+  - Batch-Verarbeitung mehrerer Varianten gleichzeitig
+- **URL-Cleaner Component**
+  - Automatische Bereinigung der URL nach Parameter-Verarbeitung
+  - LocalStorage cleanup für Transfer-Daten
+  - Client-side Component für Browser-History-Management
+- **API-Route /api/cart/add-variants**
+  - POST-Endpoint für programmatischen Cart-Zugriff
+  - JSON-basierte Varianten-Übergabe
+  - Fallback-Option für CORS-Szenarien
+- **Konfigurator-Integration vorbereitet**
+  - Unterstützt Weiterleitung von konfigurator.dersolarwart.de
+  - Cart-Transfer über URL-Parameter möglich
+  - Nahtlose Produktübernahme zwischen Domains
+
+### Changed
+- Cart-Page erweitert um processUrlParameters Funktion
+- Cart-Template erhält shouldCleanUrl Flag
+- Build-Prozess verifiziert und optimiert
+
+### Technical Details
+- Server-side URL-Parameter Verarbeitung
+- Client-side URL-Bereinigung nach Success
+- Console-Logging für Debugging implementiert
+- Error-Handling für fehlgeschlagene Varianten-Adds
+
 ## [0.2.0] - 2025-01-31
 
 ### Added
