@@ -5,6 +5,73 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2025-08-13
+
+### Added
+- **Supabase MCP Integration**
+  - Erfolgreich Supabase MCP Server in Claude Code installiert
+  - Direct Database Access über Model Context Protocol
+  - Project Reference: arcaytnxsrhvnaohgcef
+
+### Fixed
+- **Solarwart Produkte vollständig repariert**
+  - Alle 6 Produkte existieren nun in der Datenbank
+  - Fehlende Produkte (DC/AC Überspannungsschutz, Drohneninspektion) wurden angelegt
+  - Alle Produkte haben jetzt funktionsfähige Varianten
+  - Metadata für Konfigurator-Integration aktualisiert
+  - Update-Scripts für zukünftige Wartung erstellt:
+    - `npm run check:solarwart` - Status-Check
+    - `npm run update:solarwart` - Metadata Update
+    - `npm run fix:solarwart` - Vollständige Reparatur
+
+### Technical
+- Neue Scripts für Produkt-Management
+- Vereinfachte Varianten-Erstellung ohne Workflow-Komplikationen
+- Direkte Service-Methoden statt komplexer Workflows
+
+## [0.5.0] - 2025-01-13
+
+### Added
+- **Solarwart Preissystem - Phase 1: Backend-Infrastruktur** ✅
+- **Solarwart Preissystem - Phase 2: Produkt-Setup** ✅
+  - 6 Solarwart-Produkte angelegt:
+    - Photovoltaik-Reinigung (dynamische Preisberechnung)
+    - Photovoltaik-Wartung (Jahres-/Monatsverträge)
+    - Monitoring/Fernüberwachung (Setup + Abo)
+    - DC-Überspannungsschutz (modulbasierte Berechnung)
+    - AC-Überspannungsschutz (mit Zusatzoptionen)
+    - Drohneninspektion (Staffelpreise)
+  - Vollständige Produkt-Metadata für Konfigurator
+  - Seed-Script `seed:solarwart` für einfache Installation
+  - Test-Scripts für API-Endpoint-Validierung
+  - 5 Produktkategorien erstellt und zugewiesen
+
+**Phase 1 Details:**
+  - Custom Pricing Module mit 5 Service-Klassen:
+    - `CleaningPriceService`: Berechnung für PV-Reinigung mit allen Faktoren
+    - `MaintenancePriceService`: Wartungsverträge mit Jahres-/Monatspreisen
+    - `MonitoringPriceService`: Monitoring-Service mit Einrichtung + Abo
+    - `OvervoltagePriceService`: DC/AC Überspannungsschutz-Berechnung
+    - `DronePriceService`: Drohneninspektion mit Staffelpreisen
+  - Utility-Klassen für Berechnungen:
+    - `TierCalculator`: Mengenrabatte und Staffelpreise
+    - `FactorCalculator`: Dach-, Etagen-, Verschmutzungsfaktoren
+  - API Endpoints:
+    - `POST /api/store/solarwart/calculate-price`: Dynamische Preisberechnung
+    - `GET /api/store/solarwart/pricing-config/[productType]`: Konfiguration abrufen
+  - Workflows:
+    - `add-configured-product-to-cart`: Konfigurierte Produkte zum Warenkorb
+    - `validate-solarwart-checkout`: Preisvalidierung beim Checkout
+  - Vollständige TypeScript-Definitionen für Type-Safety
+  - Detaillierte Preisaufschlüsselung mit Breakdown
+
+### Technical
+- Medusa v2 kompatible Module-Struktur
+- Service-basierte Architektur ohne TransactionBaseService
+- Metadata-Support für Cart/Order Line Items
+- Validierung aller Eingabeparameter
+- 24h Gültigkeit für Preisberechnungen
+
 ## [0.4.0] - 2025-08-12
 
 ### Added
