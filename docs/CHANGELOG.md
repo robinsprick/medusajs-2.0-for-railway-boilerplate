@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2025-01-13
+
+### Added
+- **Solarwart Preissystem - Phase 3: Frontend-Konfiguratoren** ✅
+  - Vollständige Frontend-Integration für dynamische Preisberechnung
+  - **Konfigurator-Komponenten:**
+    - CleaningConfigurator: PV-Reinigung mit allen Faktoren
+    - MaintenanceConfigurator: Wartungsverträge (Jahres-/Monatsabo)
+    - DroneConfigurator: Drohneninspektion mit Staffelpreisen
+  - **Shared Components:**
+    - ModuleCounter: Modulanzahl mit Tier-Anzeige
+    - RoofTypeSelector: Dachtyp-Auswahl (Schrägdach/Flachdach/Freiland)
+    - FloorLevelSelector: Etagen-Auswahl mit Höhenzuschlag
+    - SoilingSelector: Verschmutzungsgrad-Auswahl
+    - DistanceInput: Entfernungseingabe mit Anfahrtskosten
+    - PriceDisplay: Live-Preisanzeige
+    - PriceBreakdown: Detaillierte Preisaufschlüsselung
+  - **Features:**
+    - Live-Preisberechnung während Konfiguration
+    - Debounced API-Calls für Performance
+    - Responsive Design für alle Geräte
+    - Fehlerbehandlung und Loading-States
+    - Produktseiten-Integration für Solarwart-Produkte
+    - Automatische Erkennung von Solarwart-Produkten
+
+### Changed
+- ProductActions erweitert für Solarwart-Produkte
+- ProductActionsWrapper erstellt für dynamische Komponenten-Auswahl
+- lib/config erweitert um MEDUSA_BACKEND_URL Export
+- lib/data/products erweitert um retrievePricedProductById
+
+### Technical
+- React Hooks für State Management
+- Custom Price Formatting Utilities
+- TypeScript für Type-Safety
+- Tailwind CSS für Styling
+- Build erfolgreich getestet und optimiert
+
 ## [0.5.1] - 2025-08-13
 
 ### Added
