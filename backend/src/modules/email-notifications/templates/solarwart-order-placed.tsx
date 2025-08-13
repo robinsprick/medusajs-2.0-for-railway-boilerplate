@@ -129,7 +129,7 @@ export const SolarwartOrderPlacedTemplate: React.FC<SolarwartOrderPlacedTemplate
             </Text>
             
             {solarwartItems.map((item) => {
-              const config = item.metadata?.solarwart_config
+              const config = item.metadata?.solarwart_config as SolarwartConfig | undefined
               if (!config) return null
 
               return (
@@ -196,13 +196,13 @@ export const SolarwartOrderPlacedTemplate: React.FC<SolarwartOrderPlacedTemplate
                         </Text>
                       ))}
                       <Text style={{ fontWeight: 'bold', marginTop: '5px' }}>
-                        Zwischensumme: {(item.subtotal! / 100).toFixed(2)} €
+                        Zwischensumme: {(Number(item.subtotal || 0) / 100).toFixed(2)} €
                       </Text>
                     </div>
                   )}
 
                   <Text style={{ margin: '10px 0 0', fontSize: '14px' }}>
-                    Menge: {item.quantity} × {(item.unit_price! / 100).toFixed(2)} € = {(item.subtotal! / 100).toFixed(2)} €
+                    Menge: {item.quantity} × {(Number(item.unit_price || 0) / 100).toFixed(2)} € = {(Number(item.subtotal || 0) / 100).toFixed(2)} €
                   </Text>
                 </div>
               )

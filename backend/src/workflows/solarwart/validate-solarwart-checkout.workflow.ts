@@ -74,7 +74,7 @@ const validateSolarwartItemsStep = createStep(
       const validationErrors = validateConfiguration(config)
       if (validationErrors.length > 0) {
         errors.push(...validationErrors.map(err => 
-          `${item.variant?.product?.title || 'Item'}: ${err}`
+          `${(item as any).variant?.product?.title || (item as any).title || 'Item'}: ${err}`
         ))
         continue
       }
@@ -90,7 +90,7 @@ const validateSolarwartItemsStep = createStep(
         let currentPrice = 0
         switch (config.productType) {
           case 'cleaning':
-            const cleaningResult = (service as CleaningPriceService).calculatePrice({
+            const cleaningResult = await (service as CleaningPriceService).calculatePrice({
               moduleCount: config.moduleCount,
               roofType: config.roofType,
               floorLevel: config.floorLevel,
@@ -101,39 +101,39 @@ const validateSolarwartItemsStep = createStep(
             break
           
           case 'maintenance':
-            const maintenanceResult = (service as MaintenancePriceService).calculatePrice({
+            const maintenanceResult = await (service as MaintenancePriceService).calculatePrice({
               moduleCount: config.moduleCount,
-              subscriptionType: config.subscription?.type || 'yearly',
-              duration: config.subscription?.duration || 1
+              subscriptionType: config.subscription?.type || 'yearly'
             })
             currentPrice = maintenanceResult.totalPrice
             break
           
           case 'monitoring':
-            const monitoringResult = (service as MonitoringPriceService).calculatePrice({
-              setupFee: config.setupFee !== false,
-              monthlyFee: config.monthlyFee !== false,
-              duration: config.subscription?.duration || 1
+            const monitoringResult = await (service as MonitoringPriceService).calculatePrice({
+              setupType: 'standard',
+              subscriptionType: config.subscription?.type === 'yearly' ? 'yearly' : 'monthly'
             })
             currentPrice = monitoringResult.totalPrice
             break
           
           case 'overvoltage_dc':
-            const ovDcResult = (service as OvervoltagePriceService).calculateDCPrice({
+            const ovDcResult = await (service as OvervoltagePriceService).calculateDCPrice({
               moduleCount: config.moduleCount
             })
             currentPrice = ovDcResult.totalPrice
             break
           
           case 'overvoltage_ac':
-            const ovAcResult = (service as OvervoltagePriceService).calculateACPrice({
-              options: config.options || []
+            const ovAcResult = await (service as OvervoltagePriceService).calculateACPrice({
+              moduleCount: config.moduleCount || 1,
+              needsRebuild: config.needsRebuild || false,
+              cableLength: config.cableLength || 0
             })
             currentPrice = ovAcResult.totalPrice
             break
           
           case 'drone':
-            const droneResult = (service as DronePriceService).calculatePrice({
+            const droneResult = await (service as DronePriceService).calculatePrice({
               moduleCount: config.moduleCount
             })
             currentPrice = droneResult.totalPrice
@@ -142,20 +142,20 @@ const validateSolarwartItemsStep = createStep(
 
         // Convert to cents for comparison (Medusa stores prices in cents)
         const currentPriceInCents = Math.round(currentPrice * 100)
-        const itemPriceInCents = item.subtotal || 0
+        const itemPriceInCents = Number(item.subtotal) || 0
 
         // Allow small difference due to rounding
         const priceDifference = Math.abs(currentPriceInCents - itemPriceInCents)
         if (priceDifference > 100) { // More than 1 EUR difference
           errors.push(
-            `Preis für ${item.variant?.product?.title || 'Item'} hat sich geändert. ` +
+            `Preis für ${(item as any).variant?.product?.title || (item as any).title || 'Item'} hat sich geändert. ` +
             `Bitte aktualisieren Sie den Warenkorb. ` +
             `(Erwartet: ${(currentPriceInCents / 100).toFixed(2)}€, ` +
-            `Aktuell: ${(itemPriceInCents / 100).toFixed(2)}€)`
+            `Aktuell: ${(Number(itemPriceInCents) / 100).toFixed(2)}€)`
           )
         }
       } catch (error) {
-        errors.push(`Failed to validate price for ${item.variant?.product?.title || 'Item'}: ${error}`)
+        errors.push(`Failed to validate price for ${(item as any).variant?.product?.title || (item as any).title || 'Item'}: ${error}`)
       }
     }
 

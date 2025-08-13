@@ -35,7 +35,7 @@ export const GET = async (
       orderNumber: order.display_id,
       createdAt: order.created_at,
       email: order.email,
-      totalAmount: order.summary?.total,
+      totalAmount: (order.summary as any)?.total || (order.summary as any)?.raw_current_order_total?.value,
       solarwartItems,
       solarwartMetadata: orderSolarwartMetadata,
       hasSolarwartServices: solarwartItems.length > 0

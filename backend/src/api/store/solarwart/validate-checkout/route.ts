@@ -2,7 +2,7 @@ import { MedusaRequest, MedusaResponse } from "@medusajs/framework"
 import { validateSolarwartCheckoutWorkflow } from "../../../../workflows/solarwart/validate-solarwart-checkout.workflow"
 
 export const POST = async (
-  req: MedusaRequest,
+  req: MedusaRequest<{ cart_id: string }>,
   res: MedusaResponse
 ) => {
   const { cart_id } = req.body
