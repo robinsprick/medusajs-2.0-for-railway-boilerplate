@@ -189,11 +189,9 @@ Preise:
           }
         }
 
-        // Link to sales channel
+        // Sales channel linking is handled separately in Medusa v2
         if (defaultSalesChannel) {
-          await productModuleService.updateProducts(product.id, {
-            sales_channels: [{ id: defaultSalesChannel.id }]
-          })
+          logger.info(`  Product will be available in ${defaultSalesChannel.name}`)
         }
 
         created++

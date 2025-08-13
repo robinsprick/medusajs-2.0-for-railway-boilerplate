@@ -18,7 +18,7 @@ export default async function runUpdateSolarwart({ container }: any) {
     
     // Run the update
     logger.info(`Found ${existingProducts.length} products to update...`)
-    const result = await updateSolarwartProducts({ container })
+    const result = await updateSolarwartProducts({ container, args: [] })
     
     logger.info("✅ Solarwart products updated successfully!")
     

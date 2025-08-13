@@ -12,7 +12,7 @@ export default async function runFixSolarwart({ container }: any) {
     logger.info("")
     
     // Run the fix
-    const result = await fixSolarwartProducts({ container })
+    const result = await fixSolarwartProducts({ container, args: [] })
     
     logger.info("✅ Fix completed successfully!")
     

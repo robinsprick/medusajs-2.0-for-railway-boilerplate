@@ -4,7 +4,7 @@ import {
   Modules,
 } from "@medusajs/framework/utils"
 
-export default async function updateSolarwartProducts({ container }: ExecArgs) {
+export default async function updateSolarwartProducts({ container, args = [] }: ExecArgs) {
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
   const productModuleService = container.resolve(Modules.PRODUCT)
 

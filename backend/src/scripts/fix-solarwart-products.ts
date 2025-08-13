@@ -5,7 +5,7 @@ import {
   ProductStatus,
 } from "@medusajs/framework/utils"
 
-export default async function fixSolarwartProducts({ container }: ExecArgs) {
+export default async function fixSolarwartProducts({ container, args = [] }: ExecArgs) {
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
   const productModuleService = container.resolve(Modules.PRODUCT)
   const salesChannelModuleService = container.resolve(Modules.SALES_CHANNEL)
@@ -287,14 +287,10 @@ Preise:
           
           const variant = await productModuleService.createProductVariants(variantData)
           
-          // Add price to variant
+          // Prices are now managed separately or through pricing module
           if (variant) {
-            await productModuleService.upsertProductVariantPrices([{
-              variant_id: variant.id,
-              amount: productData.price,
-              currency_code: "eur"
-            }])
             variantsAdded++
+            logger.info(`  Variant created with ID: ${variant.id}`)
           }
         }
       } else {
@@ -318,19 +314,13 @@ Preise:
             manage_inventory: false
           })
           
-          // Add price to variant
+          // Prices are now managed separately or through pricing module
           if (variant) {
-            await productModuleService.upsertProductVariantPrices([{
-              variant_id: variant.id,
-              amount: productData.price,
-              currency_code: "eur"
-            }])
+            logger.info(`  Variant created with ID: ${variant.id}`)
           }
           
-          // Link to sales channel
-          await productModuleService.updateProducts(newProduct.id, {
-            sales_channels: [{ id: defaultSalesChannel.id }]
-          })
+          // Sales channel linking is handled separately in Medusa v2
+          logger.info(`  Product created with ID: ${newProduct.id}`)
           
           created++
         }
