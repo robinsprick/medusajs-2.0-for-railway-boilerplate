@@ -19,6 +19,11 @@ export default async function ProductActionsWrapper({
     return null
   }
 
+  // Debug logging
+  console.log('Product handle:', product.handle)
+  console.log('Product metadata:', product.metadata)
+  console.log('Has solarwart_pricing:', !!product.metadata?.solarwart_pricing)
+
   // Check if this is a Solarwart product
   const isSolarwartProduct = product.metadata?.solarwart_pricing
 
