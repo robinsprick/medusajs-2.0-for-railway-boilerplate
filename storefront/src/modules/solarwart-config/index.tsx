@@ -3,6 +3,9 @@
 import { CleaningConfigurator } from './configurators/cleaning-configurator'
 import { MaintenanceConfigurator } from './configurators/maintenance-configurator'
 import { DroneConfigurator } from './configurators/drone-configurator'
+import { MonitoringConfigurator } from './configurators/monitoring-configurator'
+import { OvervoltageDCConfigurator } from './configurators/overvoltage-dc-configurator'
+import { OvervoltageACConfigurator } from './configurators/overvoltage-ac-configurator'
 import { StoreProduct } from "@medusajs/types"
 
 export const getConfigurator = (calculationType: string) => {
@@ -13,6 +16,12 @@ export const getConfigurator = (calculationType: string) => {
       return MaintenanceConfigurator
     case 'drone':
       return DroneConfigurator
+    case 'monitoring':
+      return MonitoringConfigurator
+    case 'overvoltage_dc':
+      return OvervoltageDCConfigurator
+    case 'overvoltage_ac':
+      return OvervoltageACConfigurator
     default:
       return null
   }
@@ -58,4 +67,11 @@ export const SolarwartConfigurator = ({
   )
 }
 
-export { CleaningConfigurator, MaintenanceConfigurator, DroneConfigurator }
+export { 
+  CleaningConfigurator, 
+  MaintenanceConfigurator, 
+  DroneConfigurator,
+  MonitoringConfigurator,
+  OvervoltageDCConfigurator,
+  OvervoltageACConfigurator
+}

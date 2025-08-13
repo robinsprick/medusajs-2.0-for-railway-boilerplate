@@ -1,8 +1,8 @@
 # Solarwart Medusa Backend - Progress Tracker
 
-## 🚀 Projekt Status: UI Redesign Complete
+## 🚀 Projekt Status: Vollständige Konfiguratoren implementiert
 
-**Letztes Update**: 2025-01-31
+**Letztes Update**: 2025-01-13 (v1.4.0)
 
 ## ✅ Abgeschlossene Features
 
@@ -110,12 +110,43 @@
 - TypeScript
 - Node.js v20+
 
+## ✅ Neu hinzugefügt (v1.4.0 - 2025-01-13)
+
+### Vollständige Solarwart-Konfiguratoren
+- ✅ **Alle 6 Produkttypen haben jetzt Konfiguratoren:**
+  - `cleaning-configurator.tsx` - PV-Reinigung
+  - `maintenance-configurator.tsx` - Wartung
+  - `drone-configurator.tsx` - Drohneninspektion
+  - `monitoring-configurator.tsx` - Monitoring/Fernüberwachung (NEU)
+  - `overvoltage-dc-configurator.tsx` - DC-Überspannungsschutz (NEU)
+  - `overvoltage-ac-configurator.tsx` - AC-Überspannungsschutz (NEU)
+
+### Features der neuen Konfiguratoren:
+- ✅ **Monitoring-Konfigurator:**
+  - Auswahl zwischen monatlicher und jährlicher Abrechnung
+  - Einrichtungsgebühr + laufende Kosten
+  - Ersparnis-Anzeige bei Jahresabo
+  - Detaillierte Leistungsbeschreibung
+
+- ✅ **DC-Überspannungsschutz-Konfigurator:**
+  - Automatische Berechnung der benötigten Einheiten
+  - String-Berechnung (Module ÷ 18)
+  - Einheiten-Berechnung (Strings ÷ 2)
+  - Transparente Formel-Anzeige
+
+- ✅ **AC-Überspannungsschutz-Konfigurator:**
+  - Hutschienen-Option (+129€)
+  - Variable Kabellänge mit Zusatzkosten
+  - Projektanfrage für Anlagen > 100 Module
+  - Automatische Weiterleitung bei Großprojekten
+
 ## 📋 Nächste Schritte
 
 ### Kurzfristig:
-- [ ] Mobile Navigation implementieren (Hamburger-Menü)
-- [ ] Weitere Seiten im neuen Design anpassen (Store, Collections, Product Details)
-- [ ] TypeScript Fehler in Scripts beheben
+- [ ] Backend API-Endpoints für neue Konfiguratoren testen
+- [ ] Cart-Integration für konfigurierte Produkte validieren
+- [ ] Checkout-Flow mit konfigurierten Produkten testen
+- [ ] Mobile Responsiveness optimieren
 - [ ] Payment Provider (Mollie) konfigurieren
 - [ ] Shipping Options einrichten
 - [ ] Email-Benachrichtigungen konfigurieren

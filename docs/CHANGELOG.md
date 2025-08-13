@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2025-01-13
+
+### Added
+- **Vollständige Solarwart-Konfiguratoren implementiert** ✅
+  - **Neue Konfiguratoren für fehlende Services:**
+    - `monitoring-configurator.tsx`: Monitoring/Fernüberwachung mit Abo-Auswahl
+    - `overvoltage-dc-configurator.tsx`: DC-Überspannungsschutz mit automatischer Einheitenberechnung
+    - `overvoltage-ac-configurator.tsx`: AC-Überspannungsschutz mit Zusatzoptionen
+  - **Features der neuen Konfiguratoren:**
+    - Monitoring: Monatliche/jährliche Abrechnung, Einrichtungsgebühr, Preisersparnis-Anzeige
+    - DC-Überspannungsschutz: Automatische String- und Einheitenberechnung basierend auf Modulanzahl
+    - AC-Überspannungsschutz: Hutschienen-Option, variable Kabellänge, Projektanfrage für große Anlagen
+  - **UI-Verbesserungen:**
+    - Detaillierte Berechnungsanzeige mit Formeln
+    - Responsive Layouts für alle Geräte
+    - Informative Beschreibungen und Leistungsübersichten
+    - Farbcodierte Status-Meldungen (Info, Warnung, Erfolg)
+
+### Fixed
+- Import-Fehler für `formatAmount` behoben - verwendet jetzt `formatPriceSimple`
+- ModuleCounter Import korrigiert (Named Export statt Default)
+- Build-Warnungen eliminiert
+
+### Changed
+- `getConfigurator` Funktion erweitert für alle 6 Produkttypen
+- Index-Datei aktualisiert mit neuen Konfigurator-Exports
+
+### Technical
+- Alle 6 Solarwart-Produkte haben jetzt funktionierende Konfiguratoren
+- Build erfolgreich ohne Fehler durchgeführt
+- TypeScript Type-Safety gewährleistet
+
 ## [0.6.0] - 2025-01-13
 
 ### Added
