@@ -5,15 +5,19 @@ import { HttpTypes } from "@medusajs/types"
 import { Heading, Table } from "@medusajs/ui"
 
 import Item from "@modules/cart/components/item"
+import SolarwartItem from "@modules/cart/components/solarwart-item"
 import SkeletonLineItem from "@modules/skeletons/components/skeleton-line-item"
 import { useTranslations } from "@lib/hooks/use-translations"
 
 type ItemsTemplateProps = {
   items?: HttpTypes.StoreCartLineItem[]
+  cart?: HttpTypes.StoreCart
 }
 
-const ItemsTemplate = ({ items }: ItemsTemplateProps) => {
+const ItemsTemplate = ({ items, cart }: ItemsTemplateProps) => {
   const { t } = useTranslations()
+  const currencyCode = cart?.currency_code || "EUR"
+  
   return (
     <div>
       <div className="pb-3 flex items-center">
@@ -40,6 +44,10 @@ const ItemsTemplate = ({ items }: ItemsTemplateProps) => {
                   return (a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1
                 })
                 .map((item) => {
+                  // Check if this is a Solarwart configured item
+                  if (item.metadata?.solarwart_config) {
+                    return <SolarwartItem key={item.id} item={item} currencyCode={currencyCode} />
+                  }
                   return <Item key={item.id} item={item} />
                 })
             : repeat(5).map((i) => {
