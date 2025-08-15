@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2025-01-15
+
+### Added
+- **Custom Price Support für Konfigurator-Integration** ✅
+  - Neue Backend-Route `/store/solarwart/cart/add-custom-item` für Line Items mit benutzerdefinierten Preisen
+  - Frontend-Route `/api/cart/konfigurator-add-custom` für Konfigurator-Anfragen
+  - Support für dynamisch berechnete Preise vom Konfigurator
+  - Metadata-Storage für Konfigurator-Konfigurationen
+  - CORS-Support für konfigurator.dersolarwart.de
+
+### Features
+- **Backend Custom Item Route:**
+  - Akzeptiert berechnete Preise in Cents
+  - Speichert Konfigurator-Konfiguration in Metadata
+  - Unterstützt Variant- und Product-IDs
+  - Validiert Cart und Region
+  
+- **Frontend Integration Route:**
+  - GET und POST Support
+  - Batch-Processing für mehrere Items
+  - Automatische Cart-Erstellung wenn nötig
+  - Optional: Direktes Redirect zum Warenkorb
+  - Detailliertes Error-Reporting
+
+### Technical
+- Direkte Cart Service Integration ohne Workflows
+- Custom Price Flag für Line Items
+- Vollständige TypeScript-Typisierung
+- Ausführliche Dokumentation in `KONFIGURATOR-CART-INTEGRATION.md`
+
+### Fixed
+- Problem mit Standard-Variantenpreisen bei konfigurierten Produkten
+- Cart Items übernehmen jetzt korrekt dynamische Preise
+
 ## [1.4.0] - 2025-01-13
 
 ### Added
