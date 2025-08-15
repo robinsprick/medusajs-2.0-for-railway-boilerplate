@@ -36,8 +36,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ausführliche Dokumentation in `KONFIGURATOR-CART-INTEGRATION.md`
 
 ### Fixed
-- Problem mit Standard-Variantenpreisen bei konfigurierten Produkten
-- Cart Items übernehmen jetzt korrekt dynamische Preise
+- **Problem mit Standard-Variantenpreisen bei konfigurierten Produkten**
+  - SolarwartProductActions und SolarwartProductActionsWrapper nutzen jetzt die custom price route
+  - Produkte ohne Preise können jetzt korrekt zum Warenkorb hinzugefügt werden
+  - Konfigurator übergibt berechnete Preise in Cents an Backend
+  - Import-Fehler in Backend-Route behoben (entfernt @medusajs/types)
+  - Helper-Funktion für Config-Beschreibungen hinzugefügt
 
 ## [1.4.0] - 2025-01-13
 

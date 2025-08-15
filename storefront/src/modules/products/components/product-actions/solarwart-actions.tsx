@@ -30,21 +30,75 @@ export const SolarwartProductActions = ({
   }
 
   const handleAddToCart = async (config: any) => {
-    // Für Solarwart-Produkte nehmen wir die erste Variante
-    const variant = product.variants?.[0]
-    if (!variant?.id) {
-      console.error('No variant found for product')
+    // Extract calculated price from metadata
+    const calculatedPrice = config.metadata?.solarwart_config?.calculatedPrice
+    
+    if (!calculatedPrice) {
+      console.error('No calculated price found in config')
+      alert('Fehler: Kein berechneter Preis gefunden. Bitte konfigurieren Sie das Produkt erneut.')
       return
     }
 
-    await addToCart({
-      variantId: variant.id,
-      quantity: config.quantity || 1,
-      countryCode,
-      metadata: config.metadata
-    })
+    const variant = product.variants?.[0]
     
-    setShowConfigurator(false)
+    try {
+      // Use the custom price endpoint for Solarwart products
+      const response = await fetch('/api/cart/konfigurator-add-custom', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          items: [{
+            variant_id: variant?.id,
+            product_id: product.id,
+            quantity: config.quantity || 1,
+            unit_price: Math.round(calculatedPrice * 100), // Convert to cents
+            title: product.title || 'Solarwart Service',
+            description: getConfigDescription(config.metadata?.solarwart_config),
+            config: config.metadata?.solarwart_config,
+            metadata: config.metadata
+          }],
+          countryCode,
+          source: 'solarwart-configurator'
+        })
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to add to cart')
+      }
+
+      // Refresh the page to show updated cart
+      window.location.reload()
+      
+    } catch (error) {
+      console.error('Error adding to cart:', error)
+      alert('Fehler beim Hinzufügen zum Warenkorb. Bitte versuchen Sie es erneut.')
+    }
+  }
+
+  // Helper function to generate description from config
+  const getConfigDescription = (config: any) => {
+    if (!config) return ''
+    
+    const parts = []
+    if (config.moduleCount) parts.push(`${config.moduleCount} Module`)
+    if (config.roofType) {
+      const roofTypes: any = {
+        'schraegdach': 'Schrägdach',
+        'flachdach': 'Flachdach',
+        'freiland': 'Freiland'
+      }
+      parts.push(`${roofTypes[config.roofType] || config.roofType}`)
+    }
+    if (config.cleaningsPerYear) parts.push(`${config.cleaningsPerYear}x jährlich`)
+    if (config.subscriptionType) parts.push(`${config.subscriptionType === 'yearly' ? 'Jahresvertrag' : 'Monatsabo'}`)
+    if (config.needsHutschiene) parts.push('Mit Hutschiene')
+    if (config.cableLength) parts.push(`${config.cableLength}m Kabel`)
+    
+    return parts.join(', ')
   }
 
   return (
