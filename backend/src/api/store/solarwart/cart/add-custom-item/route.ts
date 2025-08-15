@@ -2,10 +2,6 @@ import {
   MedusaRequest, 
   MedusaResponse
 } from "@medusajs/framework"
-import { 
-  ICartModuleService,
-  IProductModuleService
-} from "@medusajs/types"
 
 interface CustomItemRequest {
   cart_id: string
@@ -24,8 +20,8 @@ export async function POST(
   res: MedusaResponse
 ): Promise<void> {
   try {
-    const cartService = req.scope.resolve<ICartModuleService>("cart")
-    const productService = req.scope.resolve<IProductModuleService>("product")
+    const cartService = req.scope.resolve("cart")
+    const productService = req.scope.resolve("product")
     
     const {
       cart_id,
